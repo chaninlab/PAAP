@@ -7,10 +7,6 @@ library(protr)
 library(seqinr)
 library(Interpol)
 
-#######Read data
-x <- read.fasta('Hexa.fasta', seqtype="AA", as.string = TRUE)
-error  <- matrix(nrow = 10, ncol = 1)
-
 ##### Set parameter for PseAAC
 para1 = 2
 para2 = 0.1

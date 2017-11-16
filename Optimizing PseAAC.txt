@@ -1,11 +1,12 @@
 setwd('D:\\Peptide prediction\\Antihypertensive peptides\\CLassification\\Backup')
-
+library(caret)
+library(randomForest)
 library(Interpol)
 library(protr)
 library(seqinr)
 
-x <- read.fasta('tetraall.fasta', seqtype="AA", as.string = TRUE)
-D = read.csv("tetraall.csv", header = TRUE) 
+x <- read.fasta('AHTP2132.fasta', seqtype="AA", as.string = TRUE)
+D = read.csv("largeall.csv", header = TRUE) 
 
 lam = 3
 error  <- matrix(nrow = lam, ncol = 1)

@@ -1,20 +1,8 @@
 #######set directory
 setwd('D:\\Peptide prediction\\Antihypertensive peptides\\CLassification\\AHTP')
 #######Load package
-library(RWeka)
 library(caret)
 library(randomForest)
-library(kernlab)
-library(e1071)
-library(corrplot)
-library(C50)
-library(nnet)
-library(e1071)
-library(GA)
-library(cvTools) 
-library(Metrics)
-library(MASS)
-library(pls)
 library(Interpol)
 library(protr)
 library(seqinr)
@@ -33,7 +21,7 @@ MCCts  <- matrix(nrow = m, ncol = 1)
 para1 = 3
 para2 = 0.1
 #######Read data
-x <- read.fasta('allall.fasta', seqtype="AA", as.string = TRUE)
+x <- read.fasta('AHTP2132.fasta', seqtype="AA", as.string = TRUE)
 D = read.csv("Label all.csv", header = TRUE) 
 m = length(x)
 aac <- t(sapply(x, extractAAC))
@@ -109,7 +97,3 @@ average[,i] = mean(result[,i])
 std[,i] = sd(result[,i])
 }
 finalRE = t(rbind(average,std))      
-
-write.csv(finalRE, "Tr and Ts _10CV AAC and PAAC.csv", row.names=TRUE, na="")
-
-

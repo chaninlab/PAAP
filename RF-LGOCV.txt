@@ -1,20 +1,8 @@
 #######set directory
 setwd('D:\\Peptide prediction\\Antihypertensive peptides\\CLassification\\AHTP')
 #######Load package
-library(RWeka)
 library(caret)
 library(randomForest)
-library(kernlab)
-library(e1071)
-library(corrplot)
-library(C50)
-library(nnet)
-library(e1071)
-library(GA)
-library(cvTools) 
-library(Metrics)
-library(MASS)
-library(pls)
 library(Interpol)
 library(protr)
 library(seqinr)
@@ -34,7 +22,6 @@ dpc = c(21:420)
 index = c(aac, dpc, n)
 internal <- data1[,index]
 external <- data2[,index]
-
 
 ######### Optimized parameter
 control <- trainControl(method="repeatedcv", number=10, repeats=3)

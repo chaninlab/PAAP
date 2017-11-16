@@ -8,13 +8,13 @@ library(seqinr)
 library(Interpol)
 
 #######Read data
-#######Extract AAC DPC TPC
 x <- read.fasta('Hexa.fasta', seqtype="AA", as.string = TRUE)
 error  <- matrix(nrow = 10, ncol = 1)
 
+##### Set parameter for PseAAC
 para1 = 2
 para2 = 0.1
-#######Read data
+##### Read data
 x <- read.fasta('AHTP2132.fasta', seqtype="AA", as.string = TRUE)
 D = read.csv("largeall.csv", header = TRUE) 
 

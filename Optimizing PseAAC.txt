@@ -1,0 +1,26 @@
+setwd('D:\\Peptide prediction\\Antihypertensive peptides\\CLassification\\Backup')
+
+library(Interpol)
+library(protr)
+library(seqinr)
+
+x <- read.fasta('tetraall.fasta', seqtype="AA", as.string = TRUE)
+D = read.csv("tetraall.csv", header = TRUE) 
+
+lam = 3
+error  <- matrix(nrow = lam, ncol = 1)
+
+m = length(x)
+A <- x[(sapply(x, protcheck))]
+for(pse in 1:lam){
+paac <- matrix(nrow = m, ncol = 20 + pse)
+for(i in 1:m){ 
+paac[i, ] = extractPAAC(A[[i]][1],lambda = pse,props = c("Hydrophobicity", "Hydrophilicity", "SideChainMass"))
+}
+internal= data.frame (paac, Class=D[,ncol(D)])
+ntree <- randomForest(Class ~ ., internal, ntree= 100, orm.votes=TRUE,keep.forest=TRUE, importance=TRUE)
+error[pse,] <- sum(ntree $ confusion[,3])
+}
+
+ntr = cbind(c(1:lam),error)
+ntr2 = ntr[order(ntr[,2]),][1]

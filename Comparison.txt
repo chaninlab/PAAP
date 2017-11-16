@@ -1,0 +1,78 @@
+#######set directory
+setwd('D:\\Data for R\\Peptide prediction\\Antihypertensive peptides\\CLassification\\Backup')
+#######Load package
+library(RWeka)
+library(caret)
+library(randomForest)
+library(kernlab)
+library(e1071)
+library(corrplot)
+library(C50)
+library(nnet)
+library(e1071)
+library(GA)
+library(cvTools) 
+library(Metrics)
+library(MASS)
+library(pls)
+library(protr)
+library(seqinr)
+library(Interpol)
+
+#######Read data
+#######Extract AAC DPC TPC
+x <- read.fasta('Hexa.fasta', seqtype="AA", as.string = TRUE)
+error  <- matrix(nrow = 10, ncol = 1)
+
+length(x)
+A <- x[(sapply(x, protcheck))]
+AAC <- t(sapply(A, extractAAC))
+DC <- t(sapply(A, extractDC))
+ndat = 199
+ext = ndat +1
+C = cbind(AAC,DC)
+AHP = cbind(C[1:ndat,], Class=rep("AHP",ndat))
+nonAHP = cbind(C[ext:nrow(C),], Class=rep("nonAHP",ndat))
+internal = rbind(AHP,nonAHP)
+
+write.csv(internal, "Hexa.csv", row.names=TRUE, na="")
+
+internal <- read.csv("Hexa.csv", header = TRUE) 
+
+######### Optimized parameter
+model <- tuneRF(internal[,-ncol(internal)], internal[,ncol(internal)], stepFactor=1.5)
+index <- c(100,200,300,400,500,600,700,800,900,1000)
+for(k in 1:10){
+ntree <- randomForest(Class ~ ., internal, ntree= index[k],mtry = model[order(model[,2]),][1] ,orm.votes=TRUE,keep.forest=TRUE, importance=TRUE)
+error[k,] <- sum(ntree $ confusion[,3])
+}
+ntr = cbind(c(1:10),error)
+ntr2 = ntr[order(ntr[,2]),][1]
+
+######Loop for 10-fold CV
+k <- 5;
+Resultcv <- 0;
+folds <- cvsegments(nrow(internal), k);
+
+for (fold in 1:k){
+  currentFold <- folds[fold][[1]];
+  RF = randomForest(Class ~ ., internal[-currentFold,], ntree= index[ntr2],mtry = model[order(model[,2]),][1] ,
+  orm.votes=TRUE,keep.forest=TRUE, importance=TRUE) ## Building RF model
+  pred = predict(RF, internal[currentFold,])
+  Resultcv <- Resultcv + table(true=internal[currentFold,]$Class, pred=pred);   
+}
+
+################### Performance report
+data = Resultcv
+	ACCtr= (data[1]+data[4])/(data[1]+data[2]+data[3]+data[4])*100
+	SENStr  =  (data[1]/(data[1]+data[2]))*100
+	SPECtr = (data[4])/(data[3]+data[4])*100
+	MCC1      = (data[1]*data[4]) - (data[2]*data[3])
+	MCC2      =  (data[4]+data[2])*(data[4]+data[3])
+	MCC3      =  (data[1]+data[2])*(data[1]+data[3])
+	MCC4	=  sqrt(MCC2)*sqrt(MCC3)
+	MCCtr = MCC1/MCC4
+round(data.frame (ACCtr,SENStr,SPECtr,MCCtr),2)
+
+
+write.csv(allresult, "RF-AAC-DPC.csv", row.names=TRUE, na="")

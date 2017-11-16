@@ -12,7 +12,7 @@ para1 = 2
 para2 = 0.1
 ##### Read data
 x <- read.fasta('AHTP2132.fasta', seqtype="AA", as.string = TRUE)
-D = read.csv("largeall.csv", header = TRUE) 
+D = read.csv("Label all.csv", header = TRUE) 
 
 ###### Feature extraction
 m = length(x)

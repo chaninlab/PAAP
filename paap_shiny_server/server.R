@@ -55,10 +55,10 @@ RGGGLE
         x <- inTextbox
         write.fasta(sequence = x, names = names(x),
                     nbchar = 80, file.out = "text.fasta")
-        x <- readFASTA("text.fasta")
+        xtest <- readFASTA("text.fasta")
         
         # Feature extraction for Testing set
-        xtest <- read.fasta('example.fasta', seqtype="AA", as.string = TRUE)###read data
+        #xtest <- read.fasta('example.fasta', seqtype="AA", as.string = TRUE)###read data
         xtest2 <- xtest[(sapply(xtest, protcheck))]###check special symbol
         m2 = length(xtest2)
         paactest <- matrix(nrow = m2, ncol = 23)
@@ -74,10 +74,10 @@ RGGGLE
       } 
       else {  
         # Read data from uploaded file
-        x <- readFASTA(inFile$datapath)
+        xtest <- readFASTA(inFile$datapath)
         
         # Feature extraction for Testing set
-        xtest <- read.fasta('example.fasta', seqtype="AA", as.string = TRUE)###read data
+        #xtest <- read.fasta('example.fasta', seqtype="AA", as.string = TRUE)###read data
         xtest2 <- xtest[(sapply(xtest, protcheck))]###check special symbol
         m2 = length(xtest2)
         paactest <- matrix(nrow = m2, ncol = 23)

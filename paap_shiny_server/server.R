@@ -12,7 +12,9 @@ shinyServer(function(input, output, session) {
     shinyjs::hide("downloadData") # Hide download button before input submission
     if(input$submitbutton>0)
       shinyjs::show("downloadData") # Show download button after input submission
-    
+  })
+ 
+  observe({  
     FASTADATA <- ''
     fastaexample <- '>AHTP1
 AHEPVK
